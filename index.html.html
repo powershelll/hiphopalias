@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALIAS HIP-HOP</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: linear-gradient(135deg, #111827, #1f2937);
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container { max-width: 800px; width: 100%; }
+        h1 { font-size: 3em; margin-bottom: 10px; color: #fbbf24; text-align: center; }
+        h2 { font-size: 1.5em; color: #fcd34d; margin: 20px 0; text-align: center; }
+        .menu { text-align: center; }
+        button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s;
+        }
+        .btn-play { background: linear-gradient(90deg, #fbbf24, #f97316); }
+        .btn-play:hover { transform: scale(1.05); }
+        .btn-back { background: #6b7280; }
+        .btn-ready { background: #10b981; font-size: 1.3em; padding: 20px; }
+        .game-screen { display: none; }
+        .score-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .team { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; }
+        .timer {
+            font-size: 4em;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .timer.danger { color: #ef4444; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 4px; border: 2px solid #fbbf24; }
+        .word-display {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            margin: 20px 0;
+            color: #fcd34d;
+        }
+        .ready-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .ready-screen h2 {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        .ready-screen p {
+            font-size: 1.3em;
+            margin: 20px 0;
+            color: #fcd34d;
+        }
+        .team-indicator {
+            font-size: 2em;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- МЕНЮ -->
+        <div id="menu" class="menu">
+            <h1>🎤 ALIAS</h1>
+            <h2>HIP-HOP EDITION</h2>
+            <button class="btn-play" onclick="startGame()">👥 КОМАНДНАЯ ИГРА</button>
+            <button class="btn-play" onclick="startSolo()">💪 ТРЕНИРОВКА</button>
+        </div>
+
+        <!-- ВВОД КОМАНД -->
+        <div id="teams" class="game-screen">
+            <h2>⚔️ НАЗВАНИЯ КОМАНД</h2>
+            <input type="text" id="team1" placeholder="Команда 1">
+            <input type="text" id="team2" placeholder="Команда 2">
+            <button class="btn-play" onclick="playTeams()">🚀 НАЧАТЬ</button>
+            <button class="btn-back" onclick="goMenu()">НАЗАД</button>
+        </div>
+
+        <!-- ПРОВЕРКА ГОТОВНОСТИ -->
+        <div id="ready" class="game-screen">
+            <div class="ready-screen">
+                <h2>🎮 РАУНД <span id="readyRound">1</span>/4</h2>
+                <div class="team-indicator" style="font-size: 1.2em; padding: 40px 20px;">
+                    <p id="readyTeam" style="margin-bottom: 20px;">Команда 1</p>
+                    <p style="font-size: 1.3em;">Подтвердите готовность</p>
+                </div>
+                <p style="margin: 30px 0; font-size: 1.2em;">
+                    ⏰ <strong>60 СЕКУНД</strong> на объяснение
+                </p>
+                <button class="btn-ready" onclick="startRound()">✅ ГОТОВЫ! НАЧИНАЕМ!</button>
+                <button class="btn-back" onclick="goMenu()" style="margin-top: 20px;">🏠 В МЕНЮ</button>
+            </div>
+        </div>
+
+        <!-- ИГРА -->
+        <div id="game" class="game-screen">
+            <div class="score-board">
+                <div class="team">
+                    <h3 id="t1name">Команда 1</h3>
+                    <h1 id="t1score">0</h1>
+                </div>
+                <div class="team">
+                    <h3 id="t2name">Команда 2</h3>
+                    <h1 id="t2score">0</h1>
+                </div>
+            </div>
+            <h2>РАУНД <span id="round">1</span>/4</h2>
+            <div class="timer" id="timer">60</div>
+            <div class="word-display" id="word">???</div>
+            <button class="btn-play" onclick="showWord()" id="btnShow">👁️ ПОКАЗАТЬ</button>
+            <div style="margin: 20px 0;">
+                <button class="btn-play" onclick="correct()" style="background: #10b981;">✅ УГАДАЛИ!</button>
+                <button class="btn-play" onclick="skip()" style="background: #f97316; margin-top: 10px;">⏭️ ПРОПУСТИТЬ</button>
+                <button class="btn-play" onclick="endRound()" style="background: #3b82f6; margin-top: 10px;">⏹️ КОНЕЦ РАУНДА</button>
+                <button class="btn-back" onclick="goMenu()" style="margin-top: 10px;">🏠 МЕНЮ</button>
+            </div>
+            <h3 style="text-align: center;">Очков в раунде: <span id="roundScore">0</span></h3>
+        </div>
+
+        <!-- РЕЗУЛЬТАТЫ -->
+        <div id="result" class="game-screen">
+            <h2>🏆 РЕЗУЛЬТАТЫ 🏆</h2>
+            <div class="score-board">
+                <div class="team">
+                    <h3 id="r1name">Команда 1</h3>
+                    <h1 id="r1score">0</h1>
+                </div>
+                <div class="team">
+                    <h3 id="r2name">Команда 2</h3>
+                    <h1 id="r2score">0</h1>
+                </div>
+            </div>
+            <h2 id="winner" style="color: #fbbf24; margin: 30px 0;">ПОБЕДИТЕЛЬ</h2>
+            <button class="btn-play" onclick="goMenu()">🎮 НОВАЯ ИГРА</button>
+        </div>
+    </div>
+
+    <script>
+        const movements = [
+            'Criss Cross', 'Running Man', 'Happy Feet', 'V-Step', 'Party Machine',
+            'Monastery', 'SpongeBob', 'BK Bounce', 'Walk It Out', 'The Wop',
+            'Party Duke', 'Kick Out', 'March Step', 'Horse Move', 'Wu Tang',
+            'Reject', 'Roger Rabbit', 'Atl Stomp', 'Indian Step', 'Z-Step',
+            'ShamRock', 'Al B', 'Back Jump', 'Kick', 'Back Jump + Kick',
+            'Heel Toe', 'Reebok', 'Dougie', 'Biz Markie', 'Town Wop',
+            'The Charleston', 'Cabbage Patch', 'Erk & Jerk', 'C-Walk', 'Roof Top',
+            'Steve Martin', 'Bart Simpson', 'Crab', 'Crazy Legs', 'Step and Touch',
+            'Cat Daddy', 'Prep', 'James Brown', 'Salsa Step', 'Jack in the Box',
+            'Party Dance', 'Janet Jackson', 'Around the World', 'Kick and Slide',
+            'Harlem Shake', 'TLC', 'Popcorn', 'Smurf', 'Robocop', 'PA DE BU RE'
+        ];
+
+        let state = {
+            screen: 'menu',
+            team1: '', team2: '',
+            t1score: 0, t2score: 0,
+            round: 1, team: 1,
+            roundScore: 0,
+            time: 60,
+            word: '',
+            showWord: false,
+            usedWords: new Set(),
+            timer: null
+        };
+
+        function show(id) {
+            document.querySelectorAll('.game-screen').forEach(e => e.style.display = 'none');
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function goMenu() { state.screen = 'menu'; show('menu'); }
+        function startGame() { show('teams'); }
+        function startSolo() { state.team1 = 'Я'; state.team2 = 'Я'; playTeams(); }
+
+        function playTeams() {
+            state.team1 = document.getElementById('team1').value || 'Команда 1';
+            state.team2 = document.getElementById('team2').value || 'Команда 2';
+            state.t1score = 0;
+            state.t2score = 0;
+            state.round = 1;
+            state.team = 1;
+            state.roundScore = 0;
+            state.usedWords = new Set();
+            showReady();
+        }
+
+        function showReady() {
+            document.getElementById('readyRound').textContent = state.round;
+            document.getElementById('readyTeam').textContent = state.team === 1 ? state.team1 : state.team2;
+            show('ready');
+        }
+
+        function startRound() {
+            newWord();
+            state.time = 60;
+            show('game');
+            startTimer();
+        }
+
+        function newWord() {
+            let word;
+            do { word = movements[Math.floor(Math.random() * movements.length)]; }
+            while (state.usedWords.has(word));
+            state.usedWords.add(word);
+            state.word = word;
+            state.showWord = false;
+            document.getElementById('word').textContent = '???';
+            document.getElementById('btnShow').textContent = '👁️ ПОКАЗАТЬ';
+        }
+
+        function showWord() {
+            state.showWord = true;
+            document.getElementById('word').textContent = state.word;
+            document.getElementById('btnShow').textContent = 'СКРЫТО';
+        }
+
+        function correct() {
+            state.roundScore++;
+            document.getElementById('roundScore').textContent = state.roundScore;
+            newWord();
+        }
+
+        function skip() { newWord(); }
+
+        function endRound() {
+            clearInterval(state.timer);
+            if (state.team === 1) state.t1score += state.roundScore;
+            else state.t2score += state.roundScore;
+
+            if (state.round < 4) {
+                state.round++;
+                state.team = state.team === 1 ? 2 : 1;
+                state.roundScore = 0;
+                document.getElementById('roundScore').textContent = 0;
+                document.getElementById('round').textContent = state.round;
+                document.getElementById('t1score').textContent = state.t1score;
+                document.getElementById('t2score').textContent = state.t2score;
+                showReady();
+            } else {
+                showResult();
+            }
+        }
+
+        function startTimer() {
+            state.timer = setInterval(() => {
+                state.time--;
+                const el = document.getElementById('timer');
+                el.textContent = state.time;
+                el.className = state.time <= 10 ? 'timer danger' : 'timer';
+                if (state.time <= 0) endRound();
+            }, 1000);
+        }
+
+        function showResult() {
+            document.getElementById('r1name').textContent = state.team1;
+            document.getElementById('r2name').textContent = state.team2;
+            document.getElementById('r1score').textContent = state.t1score;
+            document.getElementById('r2score').textContent = state.t2score;
+
+            let winner = state.t1score > state.t2score ? state.team1 : 
+                        state.t2score > state.t1score ? state.team2 : 'НИЧЬЯ';
+            document.getElementById('winner').textContent = '🏆 ' + winner + ' 🏆';
+            show('result');
+        }
+
+        // Инициализация
+        document.getElementById('team1').placeholder = 'Команда 1';
+        document.getElementById('team2').placeholder = 'Команда 2';
+        document.getElementById('t1name').textContent = 'Команда 1';
+        document.getElementById('t2name').textContent = 'Команда 2';
+        document.getElementById('round').textContent = '1';
+    </script>
+</body>
+</html>
