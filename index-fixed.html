@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALIAS: HIP-HOP EDITION</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom, #111827, #1f2937, #000000);
+            color: white;
+            min-height: 100vh;
+        }
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="loader">
+            <div class="text-center">
+                <h1 class="text-5xl font-black mb-4 bg-gradient-to-r from-yellow-300 via-red-500 to-pink-600 bg-clip-text text-transparent">ALIAS</h1>
+                <p class="text-2xl text-yellow-300">HIP-HOP EDITION</p>
+                <p class="text-gray-400 mt-4">Загрузка игры...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Простая игра без зависимостей
+        class AliasGame {
+            constructor() {
+                this.movements = [
+                    { name: 'Criss Cross', desc: 'Крис-кросс: ноги перекрещиваются в прыжке' },
+                    { name: 'Running Man', desc: 'Ранин мен: бег на месте с высокими коленями' },
+                    { name: 'Happy Feet', desc: 'Хэппи фит: быстрые лёгкие движения ступнями' },
+                    { name: 'V-Step', desc: 'V-шаг: ноги разводятся в форме буквы V' },
+                    { name: 'Party Machine', desc: 'Пати машина: энергичное ритмичное движение' },
+                    { name: 'Monastery', desc: 'Монастери: движение с изоляцией верхней части тела' },
+                    { name: 'SpongeBob', desc: 'Спанч Боб: движение как персонаж из мультфильма' },
+                    { name: 'BK Bounce', desc: 'БК баунс: качание с отскоками' },
+                    { name: 'Walk It Out', desc: 'Волк аут: уверенный шаг вперёд' },
+                    { name: 'The Wop', desc: 'Воп: резкие движения головой и руками' },
+                    { name: 'Party Duke', desc: 'Пати дюк: движение из 80х' },
+                    { name: 'Kick Out', desc: 'Кик аут: выпад ноги в сторону' },
+                    { name: 'March Step', desc: 'Марш степ: как воинский марш' },
+                    { name: 'Horse Move', desc: 'Хорс мув: движение как лошадь' },
+                    { name: 'Wu Tang', desc: 'Ву танг: боевые искусства' },
+                    { name: 'Reject', desc: 'Реджект: отрывистое движение' },
+                    { name: 'Roger Rabbit', desc: 'Кролик Роджер: быстрые прыжки' },
+                    { name: 'Atl Stomp', desc: 'Атланта стамп: топающее движение' },
+                    { name: 'Indian Step', desc: 'Индиан степ: элементы индейского танца' },
+                    { name: 'Z-Step', desc: 'Зет-шаг: движение в форме Z' },
+                    { name: 'ShamRock', desc: 'Шем рок: быстрое качающееся движение' },
+                    { name: 'Al B', desc: 'Ал би: плавное и ритмичное движение' },
+                    { name: 'Back Jump', desc: 'Бэк джамп: прыжок назад' },
+                    { name: 'Kick', desc: 'Кик: удар ногой' },
+                    { name: 'Back Jump + Kick', desc: 'Бэк джамп + кик: комбинация' },
+                    { name: 'Heel Toe', desc: 'Хил тоу: пятка-носок' },
+                    { name: 'Reebok', desc: 'Рибок: скользящие движения' },
+                    { name: 'Dougie', desc: 'Доги: качание бёдер' },
+                    { name: 'Biz Markie', desc: 'Биз марки: уникальное движение' },
+                    { name: 'Town Wop', desc: 'Таун воп: городской воп' },
+                    { name: 'The Charleston', desc: 'Чарлестон: танец 20х годов' },
+                    { name: 'Cabbage Patch', desc: 'Кэббэтч патч: как срываешь капусту' },
+                    { name: 'Erk & Jerk', desc: 'Эрк энд джёрк: дёргающие движения' },
+                    { name: 'C-Walk', desc: 'Си-волк: характерный зигзаг' },
+                    { name: 'Roof Top', desc: 'Руф топ: прыгающее движение' },
+                    { name: 'Steve Martin', desc: 'Стив Мартин: комедийное' },
+                    { name: 'Bart Simpson', desc: 'Барт Симпсон: наклон в сторону' },
+                    { name: 'Crab', desc: 'Краб: движение как краб' },
+                    { name: 'Crazy Legs', desc: 'Крейзи легс: быстрые движения ног' },
+                    { name: 'Step and Touch', desc: 'Степ энд тач: шаг с касанием' },
+                    { name: 'Cat Daddy', desc: 'Кэт дэдди: грациозное как кот' },
+                    { name: 'Prep', desc: 'Преп: стильное движение' },
+                    { name: 'James Brown', desc: 'Джеймс Браун: энергичное' },
+                    { name: 'Salsa Step', desc: 'Сальса степ: латинские элементы' },
+                    { name: 'Jack in the Box', desc: 'Джек ин зе бокс: прыгающее' },
+                    { name: 'Party Dance', desc: 'Пати денс: вечериночный танец' },
+                    { name: 'Janet Jackson', desc: 'Джанет Джексон: сексуальное' },
+                    { name: 'Around the World', desc: 'Эраунд ворлд: круговое' },
+                    { name: 'Kick and Slide', desc: 'Кик энд слайд: удар и скольжение' },
+                    { name: 'Harlem Shake', desc: 'Гарлем шейк: трясение' },
+                    { name: 'TLC', desc: 'ТИ ЭЛ СИ: вдохновлено группой' },
+                    { name: 'Popcorn', desc: 'Попкорн: прыгающие движения' },
+                    { name: 'Smurf', desc: 'Смёрф: быстрые движения' },
+                    { name: 'Robocop', desc: 'Робокоп: механичные движения' },
+                    { name: 'PA DE BU RE', desc: 'Па де бу ре: классическое движение' },
+                ];
+                
+                this.screen = 'menu';
+                this.team1Name = '';
+                this.team2Name = '';
+                this.team1Score = 0;
+                this.team2Score = 0;
+                this.roundScore = 0;
+                this.currentRound = 1;
+                this.currentTeam = 1;
+                this.timeLeft = 30;
+                this.currentWord = '';
+                this.showWord = false;
+                this.usedWords = new Set();
+                this.timer = null;
+                
+                this.render();
+            }
+            
+            getRandomWord() {
+                let word;
+                do {
+                    word = this.movements[Math.floor(Math.random() * this.movements.length)].name;
+                } while (this.usedWords.has(word));
+                return word;
+            }
+            
+            startTeamsGame() {
+                if (!this.team1Name.trim() || !this.team2Name.trim()) {
+                    alert('Введи названия обеих команд!');
+                    return;
+                }
+                this.screen = 'playing';
+                this.currentRound = 1;
+                this.currentTeam = 1;
+                this.team1Score = 0;
+                this.team2Score = 0;
+                this.roundScore = 0;
+                this.usedWords = new Set();
+                this.currentWord = this.getRandomWord();
+                this.usedWords.add(this.currentWord);
+                this.timeLeft = 30;
+                this.showWord = false;
+                this.startTimer();
+                this.render();
+            }
+            
+            startTimer() {
+                if (this.timer) clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    this.timeLeft--;
+                    if (this.timeLeft <= 0) {
+                        this.finishRound();
+                    }
+                    this.render();
+                }, 1000);
+            }
+            
+            guessedCorrect() {
+                this.roundScore++;
+                if (this.usedWords.size < this.movements.length) {
+                    this.currentWord = this.getRandomWord();
+                    this.usedWords.add(this.currentWord);
+                    this.showWord = false;
+                }
+                this.render();
+            }
+            
+            skipWord() {
+                if (this.usedWords.size < this.movements.length) {
+                    this.currentWord = this.getRandomWord();
+                    this.usedWords.add(this.currentWord);
+                    this.showWord = false;
+                }
+                this.render();
+            }
+            
+            finishRound() {
+                if (this.currentTeam === 1) {
+                    this.team1Score += this.roundScore;
+                } else {
+                    this.team2Score += this.roundScore;
+                }
+                
+                if (this.currentRound < 4) {
+                    this.currentRound++;
+                    this.currentTeam = this.currentTeam === 1 ? 2 : 1;
+                    this.roundScore = 0;
+                    this.usedWords = new Set();
+                    this.currentWord = this.getRandomWord();
+                    this.usedWords.add(this.currentWord);
+                    this.timeLeft = 30;
+                    this.showWord = false;
+                    this.startTimer();
+                } else {
+                    clearInterval(this.timer);
+                    this.screen = 'final';
+                }
+                this.render();
+            }
+            
+            resetGame() {
+                this.screen = 'menu';
+                this.team1Name = '';
+                this.team2Name = '';
+                clearInterval(this.timer);
+                this.render();
+            }
+            
+            render() {
+                const root = document.getElementById('root');
+                
+                if (this.screen === 'menu') {
+                    root.innerHTML = `
+                        <div class="min-h-screen flex items-center justify-center p-4">
+                            <div class="text-center space-y-8 max-w-2xl">
+                                <div>
+                                    <h1 class="text-7xl font-black mb-2 bg-gradient-to-r from-yellow-300 via-red-500 to-pink-600 bg-clip-text text-transparent">ALIAS</h1>
+                                    <p class="text-2xl font-bold text-yellow-300">HIP-HOP EDITION</p>
+                                    <p class="text-gray-400 mt-4 text-lg">Объясняй движения • Угадывай слова • Танцуй!</p>
+                                </div>
+                                <div class="space-y-4">
+                                    <button onclick="game.screen='teams'; game.render()" class="w-full py-4 bg-gradient-to-r from-yellow-400 to-red-500 text-black font-bold text-xl rounded-lg hover:shadow-lg transition-all">
+                                        👥 КОМАНДНАЯ ИГРА (4 РАУНДА)
+                                    </button>
+                                    <button class="w-full py-4 bg-gray-700 text-white font-bold text-xl rounded-lg">
+                                        📚 БАЗА ЗНАНИЙ (скоро)
+                                    </button>
+                                </div>
+                                <div class="text-gray-400 text-sm bg-gray-800/50 p-4 rounded-lg">
+                                    <p><strong>Правила:</strong></p>
+                                    <p>1️⃣ Объясняй слово/движение</p>
+                                    <p>2️⃣ Угадывай за 30 секунд</p>
+                                    <p>3️⃣ 4 раунда • Суммирование очков!</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (this.screen === 'teams') {
+                    root.innerHTML = `
+                        <div class="min-h-screen flex items-center justify-center p-4">
+                            <div class="text-center space-y-6 max-w-md w-full">
+                                <h2 class="text-4xl font-black text-yellow-300">⚔️ КОМАНДЫ</h2>
+                                <div class="space-y-4">
+                                    <input type="text" id="team1" placeholder="Команда 1" class="w-full px-4 py-3 bg-gray-800 border-2 border-yellow-400 rounded-lg text-white" />
+                                    <input type="text" id="team2" placeholder="Команда 2" class="w-full px-4 py-3 bg-gray-800 border-2 border-red-500 rounded-lg text-white" />
+                                </div>
+                                <button onclick="game.team1Name = document.getElementById('team1').value; game.team2Name = document.getElementById('team2').value; game.startTeamsGame()" class="w-full py-4 bg-gradient-to-r from-yellow-400 to-red-500 text-black font-bold text-lg rounded-lg">
+                                    🚀 НАЧАТЬ!
+                                </button>
+                                <button onclick="game.screen='menu'; game.render()" class="w-full py-4 bg-gray-700 text-white font-bold rounded-lg">
+                                    ❌ НАЗАД
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else if (this.screen === 'playing') {
+                    root.innerHTML = `
+                        <div class="min-h-screen flex items-center justify-center p-4">
+                            <div class="w-full max-w-4xl space-y-6">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="${this.currentTeam === 1 ? 'border-yellow-400 bg-yellow-500/10' : 'border-gray-600'} p-4 rounded-lg border-2">
+                                        <p class="text-yellow-300 font-bold">${this.team1Name}</p>
+                                        <p class="text-3xl font-black text-yellow-400">${this.team1Score}</p>
+                                    </div>
+                                    <div class="${this.currentTeam === 2 ? 'border-red-500 bg-red-500/10' : 'border-gray-600'} p-4 rounded-lg border-2">
+                                        <p class="text-red-300 font-bold">${this.team2Name}</p>
+                                        <p class="text-3xl font-black text-red-500">${this.team2Score}</p>
+                                    </div>
+                                </div>
+                                <div class="text-center space-y-4">
+                                    <div class="text-gray-300 font-bold">РАУНД ${this.currentRound} / 4</div>
+                                    <div class="${this.timeLeft > 20 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-black' : 'bg-red-500 text-white'} inline-flex items-center justify-center w-32 h-32 rounded-full font-black text-5xl">
+                                        ${this.timeLeft}
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-yellow-400 rounded-2xl p-12 text-center space-y-6">
+                                    <p class="text-yellow-300 font-bold">ОБЪЯСНИ ДВИЖЕНИЕ:</p>
+                                    ${!this.showWord ? `<button onclick="game.showWord = true; game.render()" class="px-8 py-4 bg-red-600 rounded-lg font-bold text-xl">👁️ ПОКАЗАТЬ</button>` : `<h2 class="text-6xl font-black bg-gradient-to-r from-yellow-300 to-red-500 bg-clip-text text-transparent">${this.currentWord}</h2>`}
+                                    <p class="text-green-300 font-bold">✅ ${this.roundScore} в этом раунде</p>
+                                </div>
+                                <div class="flex gap-4 justify-center flex-wrap">
+                                    <button onclick="game.guessedCorrect()" class="px-8 py-4 bg-green-600 text-white font-bold rounded-lg">✅ УГАДАЛИ!</button>
+                                    <button onclick="game.skipWord()" class="px-8 py-4 bg-orange-600 text-white font-bold rounded-lg">⏭️ ПРОПУСТИТЬ</button>
+                                    <button onclick="game.finishRound()" class="px-8 py-4 bg-blue-600 text-white font-bold rounded-lg">⏹️ КОНЕЦ</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (this.screen === 'final') {
+                    const winner = this.team1Score > this.team2Score ? this.team1Name : this.team2Score > this.team1Score ? this.team2Name : 'НИЧЬЯ';
+                    root.innerHTML = `
+                        <div class="min-h-screen flex items-center justify-center p-4">
+                            <div class="text-center space-y-8 max-w-3xl">
+                                <h2 class="text-5xl font-black text-yellow-300">ИГРА ОКОНЧЕНА! 🏆</h2>
+                                <div class="bg-gray-800 border-2 border-yellow-400 rounded-2xl p-12 space-y-8">
+                                    <div class="grid grid-cols-2 gap-6">
+                                        <div class="bg-yellow-500/20 p-6 rounded-lg">
+                                            <p class="text-3xl font-black text-yellow-400">${this.team1Name}</p>
+                                            <p class="text-5xl font-black text-yellow-300 mt-3">${this.team1Score}</p>
+                                        </div>
+                                        <div class="bg-red-500/20 p-6 rounded-lg">
+                                            <p class="text-3xl font-black text-red-400">${this.team2Name}</p>
+                                            <p class="text-5xl font-black text-red-300 mt-3">${this.team2Score}</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-4xl font-black text-purple-300">${winner}</p>
+                                </div>
+                                <button onclick="game.resetGame()" class="px-8 py-4 bg-gradient-to-r from-yellow-400 to-red-500 text-black font-bold text-xl rounded-lg w-full">
+                                    🔄 НОВАЯ ИГРА
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+        
+        // Инициализация игры
+        window.game = new AliasGame();
+    </script>
+</body>
+</html>
